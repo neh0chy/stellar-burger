@@ -15,10 +15,19 @@ import styles from './app.module.css';
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { ProtectedRoute } from '../protected-route';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { getIngredientsThunk } from '../../services/slices/ingredientsSlice';
+import { AppDispatch } from 'src/services/store';
 
 const App = () => {
   const location = useLocation();
   const backgroundLocation = location.state?.backgroundLocation;
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(getIngredientsThunk());
+  }, [dispatch]);
 
   return (
     <div className={styles.app}>

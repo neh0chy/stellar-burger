@@ -4,9 +4,15 @@ import App from './components/app/app';
 
 const container = document.getElementById('root') as HTMLElement;
 const root = ReactDOMClient.createRoot(container!);
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      {/* <Provider store={}> */}
+      <App />
+      {/* </Provider> */}
+    </BrowserRouter>
   </React.StrictMode>
 );

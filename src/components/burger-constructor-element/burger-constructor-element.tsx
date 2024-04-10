@@ -1,14 +1,28 @@
 import { FC, memo } from 'react';
 import { BurgerConstructorElementUI } from '@ui';
 import { BurgerConstructorElementProps } from './type';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from 'src/services/store';
+import {
+  removeIngredient,
+  moveUpIngredient,
+  moveDownIngredient
+} from '../../services/slices/constructorSlice';
 
 export const BurgerConstructorElement: FC<BurgerConstructorElementProps> = memo(
   ({ ingredient, index, totalItems }) => {
-    const handleMoveDown = () => {};
+    const dispatch = useDispatch<AppDispatch>();
 
-    const handleMoveUp = () => {};
+    const handleDelete = () => {
+      dispatch(removeIngredient(ingredient.id));
+    };
+    const handleMoveUp = () => {
+      dispatch(moveUpIngredient(index));
+    };
 
-    const handleClose = () => {};
+    const handleMoveDown = () => {
+      dispatch(moveDownIngredient(index));
+    };
 
     return (
       <BurgerConstructorElementUI
@@ -17,7 +31,7 @@ export const BurgerConstructorElement: FC<BurgerConstructorElementProps> = memo(
         totalItems={totalItems}
         handleMoveUp={handleMoveUp}
         handleMoveDown={handleMoveDown}
-        handleClose={handleClose}
+        handleClose={handleDelete}
       />
     );
   }

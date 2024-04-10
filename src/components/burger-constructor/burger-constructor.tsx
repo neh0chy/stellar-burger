@@ -1,18 +1,37 @@
 import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
-import { useSelector } from 'react-redux';
-import { getConstructorStateSelector } from '../../services/slices/constructorSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getConstructorStateSelector,
+  postOrderThunk,
+  removeOrderModalData
+} from '../../services/slices/constructorSlice';
+import { AppDispatch } from 'src/services/store';
 
 export const BurgerConstructor: FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const { constructorItems, orderModalData, loading } = useSelector(
     getConstructorStateSelector
   );
 
   const onOrderClick = () => {
-    if (!constructorItems.bun || loading) return;
+    if (constructorItems.bun) {
+      const ingredients: string[] = constructorItems.ingredients.map(
+        (ingredient) => ingredient._id
+      );
+
+      const order: string[] = [
+        constructorItems.bun._id,
+        ...ingredients,
+        constructorItems.bun._id
+      ];
+      dispatch(postOrderThunk(order));
+    }
   };
-  const closeOrderModal = () => {};
+  const closeOrderModal = () => {
+    dispatch(removeOrderModalData());
+  };
 
   const price = useMemo(
     () =>

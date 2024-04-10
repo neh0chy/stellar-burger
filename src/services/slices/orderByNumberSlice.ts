@@ -15,12 +15,12 @@ export const initialState: TIngredientState = {
 };
 
 export const getOrderByNumberThunk = createAsyncThunk(
-  'orderByNumber/get',
+  'burgerOrderByNumber/get',
   async (number: number) => getOrderByNumberApi(number)
 );
 
 export const orderByNumberSlice = createSlice({
-  name: 'orderByNumber',
+  name: 'burgerOrderByNumber',
   initialState,
   reducers: {},
   selectors: {

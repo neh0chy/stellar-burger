@@ -21,7 +21,7 @@ export const initialState: TFeedState = {
 export const getFeedThunk = createAsyncThunk('feed/get', getFeedsApi);
 
 export const feedSlice = createSlice({
-  name: 'feed',
+  name: 'burgerFeed',
   initialState,
   reducers: {},
   selectors: {

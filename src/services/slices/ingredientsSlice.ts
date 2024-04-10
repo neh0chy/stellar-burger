@@ -15,12 +15,12 @@ export const initialState: TIngredientState = {
 };
 
 export const getIngredientsThunk = createAsyncThunk(
-  'ingredients/get',
+  'burgerIngredients',
   getIngredientsApi
 );
 
 export const ingredientsSlice = createSlice({
-  name: 'ingredients',
+  name: 'burgerIngredients',
   initialState,
   reducers: {},
   selectors: {

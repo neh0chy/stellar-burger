@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import ingredientsSlice from './slices/ingredientsSlice';
 import feedSlice from './slices/feedSlice';
 import orderByNumberSlice from './slices/orderByNumberSlice';
+import constructorSlice from './slices/constructorSlice';
 
 import {
   TypedUseSelectorHook,
@@ -10,9 +11,10 @@ import {
 } from 'react-redux';
 
 const rootReducer = combineReducers({
-  ingredients: ingredientsSlice,
-  feed: feedSlice,
-  orderByNumber: orderByNumberSlice
+  burgerIngredients: ingredientsSlice,
+  burgerFeed: feedSlice,
+  burgerOrderByNumber: orderByNumberSlice,
+  burgerConstructor: constructorSlice
 });
 
 const store = configureStore({

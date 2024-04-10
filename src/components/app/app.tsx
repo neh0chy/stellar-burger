@@ -86,12 +86,17 @@ const App = () => {
         <Route path='*' element={<NotFound404 />} />
       </Routes>
 
-      {backgroundLocation && (
+      {!backgroundLocation && (
         <Routes>
           <Route
-            path='/img/:id'
+            path='/feed/:id'
             element={
-              <Modal title={''} onClose={() => {}}>
+              <Modal
+                title={'Детали ингредиента'}
+                onClose={() => {
+                  history.back();
+                }}
+              >
                 <OrderInfo />
               </Modal>
             }

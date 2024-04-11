@@ -8,27 +8,45 @@ import {
   removeOrderModalData
 } from '../../services/slices/constructorSlice';
 import { AppDispatch } from 'src/services/store';
+import { getUserStateSelector } from '../../services/slices/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { constructorItems, orderModalData, loading } = useSelector(
     getConstructorStateSelector
   );
 
-  const onOrderClick = () => {
+  const { isAuthenticated } = useSelector(getUserStateSelector);
+
+  function prepareOrder(): string[] {
+    let order: string[] = [];
+
     if (constructorItems.bun) {
       const ingredients: string[] = constructorItems.ingredients.map(
         (ingredient) => ingredient._id
       );
 
-      const order: string[] = [
+      order = [
         constructorItems.bun._id,
         ...ingredients,
         constructorItems.bun._id
       ];
+    }
+
+    return order;
+  }
+
+  const onOrderClick = () => {
+    if (isAuthenticated) {
+      const order = prepareOrder();
       dispatch(postOrderThunk(order));
+    } else {
+      navigate('/login');
     }
   };
+
   const closeOrderModal = () => {
     dispatch(removeOrderModalData());
   };

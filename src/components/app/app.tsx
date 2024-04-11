@@ -22,7 +22,7 @@ import { AppDispatch } from 'src/services/store';
 
 const App = () => {
   const location = useLocation();
-  const backgroundLocation = location.state?.backgroundLocation;
+  const background = location.state?.background;
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const App = () => {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes location={backgroundLocation || location}>
+      <Routes location={background || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
         <Route
@@ -83,10 +83,12 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route path='/feed/:id' element={<OrderInfo />} />
         <Route path='*' element={<NotFound404 />} />
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
       </Routes>
 
-      {!backgroundLocation && (
+      {background && (
         <Routes>
           <Route
             path='/feed/:id'
@@ -104,7 +106,12 @@ const App = () => {
           <Route
             path='/ingredients/:id'
             element={
-              <Modal title={''} onClose={() => {}}>
+              <Modal
+                title={''}
+                onClose={() => {
+                  history.back();
+                }}
+              >
                 <IngredientDetails />
               </Modal>
             }

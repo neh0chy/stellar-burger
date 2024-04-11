@@ -8,7 +8,10 @@ import {
   removeOrderModalData
 } from '../../services/slices/constructorSlice';
 import { AppDispatch } from 'src/services/store';
-import { getUserStateSelector } from '../../services/slices/userSlice';
+import {
+  getUserOrdersThunk,
+  getUserStateSelector
+} from '../../services/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
@@ -18,7 +21,7 @@ export const BurgerConstructor: FC = () => {
     getConstructorStateSelector
   );
 
-  const { isAuthenticated } = useSelector(getUserStateSelector);
+  const { userData } = useSelector(getUserStateSelector);
 
   function prepareOrder(): string[] {
     let order: string[] = [];
@@ -39,9 +42,10 @@ export const BurgerConstructor: FC = () => {
   }
 
   const onOrderClick = () => {
-    if (isAuthenticated) {
+    if (userData) {
       const order = prepareOrder();
       dispatch(postOrderThunk(order));
+      dispatch(getUserOrdersThunk());
     } else {
       navigate('/login');
     }

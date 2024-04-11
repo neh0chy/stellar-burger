@@ -18,7 +18,11 @@ import { ProtectedRoute } from '../protected-route';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { getIngredientsThunk } from '../../services/slices/ingredientsSlice';
-import { AppDispatch } from 'src/services/store';
+import { AppDispatch } from '../../services/store';
+import {
+  getUserOrdersThunk,
+  getUserThunk
+} from '../../services/slices/userSlice';
 
 const App = () => {
   const location = useLocation();
@@ -27,6 +31,8 @@ const App = () => {
 
   useEffect(() => {
     dispatch(getIngredientsThunk());
+    dispatch(getUserOrdersThunk());
+    dispatch(getUserThunk());
   }, [dispatch]);
 
   return (
@@ -51,6 +57,7 @@ const App = () => {
         <Route element={<ProtectedRoute onlyUnAuth={false} />}>
           <Route path='/profile' element={<Profile />} />
           <Route path='/profile/orders' element={<ProfileOrders />} />
+          <Route path='/profile/orders/:number' element={<OrderInfo />} />
         </Route>
       </Routes>
 
@@ -83,7 +90,7 @@ const App = () => {
             }
           />
 
-          <Route element={<ProtectedRoute />}>
+          <Route element={<ProtectedRoute onlyUnAuth={false} />}>
             <Route
               path='/profile/orders/:number'
               element={

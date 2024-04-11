@@ -10,23 +10,28 @@ import {
   PayloadAction,
   nanoid
 } from '@reduxjs/toolkit';
-import { TLoginData, TRegisterData, loginUserApi, registerUserApi } from '@api';
+import {
+  TLoginData,
+  TRegisterData,
+  getOrdersApi,
+  getUserApi,
+  loginUserApi,
+  registerUserApi
+} from '@api';
 
 export type TUserState = {
   userData: TUser | null;
-  userOrders: TOrder | null;
+  userOrders: TOrder[];
   userError: string | null;
-  // userRequest: boolean;
-  isAuthChecked: boolean;
+  isLoading: boolean;
   isAuthenticated: boolean;
 };
 
 export const initialState: TUserState = {
   userData: null, // данныые юзера, нужны для последующего редактирования (?)
-  userOrders: null, // данные с заказами юзера
+  userOrders: [], // данные с заказами юзера
   userError: null, // ошибка с уникальным именем, чтобы не было конфликта при деструктуризации в компонентах
-  // userRequest: false, //
-  isAuthChecked: false, // нужен для отображения прелоадера
+  isLoading: false, // нужен для отображения прелоадера
   isAuthenticated: false // наличие токена
 };
 
@@ -40,6 +45,18 @@ export const loginUserThunk = createAsyncThunk(
   async (data: TLoginData) => await loginUserApi(data)
 );
 
+export const getUserThunk = createAsyncThunk('burgerUser/get', getUserApi);
+
+export const getUserOrdersThunk = createAsyncThunk(
+  'burgerUser/orders',
+  getOrdersApi
+);
+
+export const getUserLogout = createAsyncThunk(
+  'burgerUser/logout',
+  getOrdersApi
+);
+
 export const constructorSlice = createSlice({
   name: 'burgerUser',
   initialState,
@@ -50,32 +67,55 @@ export const constructorSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(registerUserThunk.pending, (state) => {
-        // state.userRequest = true;
         state.userError = null;
       })
       .addCase(registerUserThunk.rejected, (state, action) => {
-        // state.userRequest = false;
         state.userError = action.error.message as string;
       })
       .addCase(registerUserThunk.fulfilled, (state) => {
-        // state.userRequest = false;
         state.userError = null;
       })
+
       .addCase(loginUserThunk.pending, (state) => {
-        // state.userRequest = true;
-        state.isAuthChecked = true;
+        state.isLoading = true;
         state.userError = null;
       })
       .addCase(loginUserThunk.rejected, (state, action) => {
-        state.isAuthChecked = false;
-        // state.userRequest = false;
+        state.isLoading = false;
         state.userError = action.error.message as string;
       })
       .addCase(loginUserThunk.fulfilled, (state, action) => {
-        // state.userRequest = false;
-        state.isAuthChecked = false;
+        state.isLoading = false;
         state.userError = null;
         state.userData = action.payload.user;
+      })
+
+      .addCase(getUserThunk.pending, (state) => {
+        state.isLoading = true;
+        state.userError = null;
+      })
+      .addCase(getUserThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.userError = action.error.message as string;
+      })
+      .addCase(getUserThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.userError = null;
+        state.userData = action.payload.user;
+      })
+
+      .addCase(getUserOrdersThunk.pending, (state) => {
+        state.isLoading = true;
+        state.userError = null;
+      })
+      .addCase(getUserOrdersThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.userError = action.error.message as string;
+      })
+      .addCase(getUserOrdersThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.userError = null;
+        state.userOrders = action.payload;
       });
   }
 });

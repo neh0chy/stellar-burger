@@ -8,13 +8,9 @@ type ProtectedRouteProps = {
 };
 
 export const ProtectedRoute = ({ onlyUnAuth }: ProtectedRouteProps) => {
-  const { isAuthChecked, userData } = useSelector(getUserStateSelector);
+  const { isLoading, userData } = useSelector(getUserStateSelector);
   const user = userData;
   const location = useLocation();
-
-  if (isAuthChecked) {
-    return <Preloader />;
-  }
 
   if (!onlyUnAuth && !user) {
     return <Navigate replace to='/login' state={{ from: location }} />;
@@ -23,6 +19,10 @@ export const ProtectedRoute = ({ onlyUnAuth }: ProtectedRouteProps) => {
   if (onlyUnAuth && user) {
     const from = location.state?.from || { pathname: '/' };
     return <Navigate replace to={from} />;
+  }
+
+  if (isLoading) {
+    return <Preloader />;
   }
 
   return <Outlet />;

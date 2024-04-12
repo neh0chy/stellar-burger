@@ -16,11 +16,11 @@ import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { ProtectedRoute } from '../protected-route';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getIngredientsThunk } from '../../services/slices/ingredientsSlice';
 import { AppDispatch } from '../../services/store';
 import {
-  getUserOrdersThunk,
+  getUserStateSelector,
   getUserThunk
 } from '../../services/slices/userSlice';
 
@@ -28,10 +28,10 @@ const App = () => {
   const location = useLocation();
   const background = location.state?.background;
   const dispatch = useDispatch<AppDispatch>();
+  const { isAuthenticated } = useSelector(getUserStateSelector);
 
   useEffect(() => {
     dispatch(getIngredientsThunk());
-    dispatch(getUserOrdersThunk());
     dispatch(getUserThunk());
   }, [dispatch]);
 
@@ -45,7 +45,6 @@ const App = () => {
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
         <Route path='*' element={<NotFound404 />} />
 
-        {/* Обертка защищенным роутом для всех роутов сразу */}
         <Route element={<ProtectedRoute onlyUnAuth />}>
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
@@ -53,7 +52,6 @@ const App = () => {
           <Route path='/reset-password' element={<ResetPassword />} />
         </Route>
 
-        {/* Обертка защищенным роутом для всех роутов сразу */}
         <Route element={<ProtectedRoute onlyUnAuth={false} />}>
           <Route path='/profile' element={<Profile />} />
           <Route path='/profile/orders' element={<ProfileOrders />} />

@@ -1,21 +1,12 @@
-import {
-  TConstructorIngredient,
-  TIngredient,
-  TOrder,
-  TUser
-} from '@utils-types';
-import {
-  createSlice,
-  createAsyncThunk,
-  PayloadAction,
-  nanoid
-} from '@reduxjs/toolkit';
+import { TOrder, TUser } from '@utils-types';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
   TLoginData,
   TRegisterData,
   getOrdersApi,
   getUserApi,
   loginUserApi,
+  logoutApi,
   registerUserApi
 } from '@api';
 
@@ -28,11 +19,11 @@ export type TUserState = {
 };
 
 export const initialState: TUserState = {
-  userData: null, // данныые юзера, нужны для последующего редактирования (?)
-  userOrders: [], // данные с заказами юзера
-  userError: null, // ошибка с уникальным именем, чтобы не было конфликта при деструктуризации в компонентах
-  isLoading: false, // нужен для отображения прелоадера
-  isAuthenticated: false // наличие токена
+  userData: null,
+  userOrders: [],
+  userError: null,
+  isLoading: false,
+  isAuthenticated: false
 };
 
 export const registerUserThunk = createAsyncThunk(
@@ -52,10 +43,7 @@ export const getUserOrdersThunk = createAsyncThunk(
   getOrdersApi
 );
 
-export const getUserLogout = createAsyncThunk(
-  'burgerUser/logout',
-  getOrdersApi
-);
+export const getUserLogout = createAsyncThunk('burgerUser/logout', logoutApi);
 
 export const constructorSlice = createSlice({
   name: 'burgerUser',
@@ -68,54 +56,84 @@ export const constructorSlice = createSlice({
     builder
       .addCase(registerUserThunk.pending, (state) => {
         state.userError = null;
+        state.isAuthenticated = false;
       })
       .addCase(registerUserThunk.rejected, (state, action) => {
         state.userError = action.error.message as string;
+        state.isAuthenticated = false;
       })
-      .addCase(registerUserThunk.fulfilled, (state) => {
+      .addCase(registerUserThunk.fulfilled, (state, action) => {
         state.userError = null;
+        state.userData = action.payload.user;
+        state.isAuthenticated = false;
       })
 
       .addCase(loginUserThunk.pending, (state) => {
         state.isLoading = true;
         state.userError = null;
+        state.isAuthenticated = false;
       })
       .addCase(loginUserThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.userError = action.error.message as string;
+        state.isAuthenticated = false;
       })
       .addCase(loginUserThunk.fulfilled, (state, action) => {
         state.isLoading = false;
         state.userError = null;
         state.userData = action.payload.user;
+        state.isAuthenticated = true;
       })
 
       .addCase(getUserThunk.pending, (state) => {
         state.isLoading = true;
         state.userError = null;
+        state.isAuthenticated = false;
       })
-      .addCase(getUserThunk.rejected, (state, action) => {
+      .addCase(getUserThunk.rejected, (state) => {
         state.isLoading = false;
-        state.userError = action.error.message as string;
+        state.isAuthenticated = false;
       })
       .addCase(getUserThunk.fulfilled, (state, action) => {
         state.isLoading = false;
         state.userError = null;
         state.userData = action.payload.user;
+        state.isAuthenticated = true;
       })
 
       .addCase(getUserOrdersThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isLoading = false;
         state.userError = null;
+        state.isAuthenticated = false;
       })
       .addCase(getUserOrdersThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.userError = action.error.message as string;
+        state.isAuthenticated = false;
       })
       .addCase(getUserOrdersThunk.fulfilled, (state, action) => {
         state.isLoading = false;
         state.userError = null;
         state.userOrders = action.payload;
+        state.isAuthenticated = true;
+      })
+
+      .addCase(getUserLogout.pending, (state) => {
+        state.isLoading = true;
+        state.userError = null;
+        state.isAuthenticated = true;
+      })
+      .addCase(getUserLogout.rejected, (state, action) => {
+        state.isLoading = false;
+        state.userError = action.error.message as string;
+        state.isAuthenticated = true;
+      })
+      .addCase(getUserLogout.fulfilled, (state) => {
+        state.userData = null;
+        state.userOrders = [];
+        state.userError = null;
+        state.isLoading = false;
+        state.isAuthenticated = false;
       });
   }
 });

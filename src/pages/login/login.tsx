@@ -11,14 +11,14 @@ import { useNavigate } from 'react-router-dom';
 export const Login: FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { userError } = useSelector(getUserStateSelector);
+  const { userError, isLoading } = useSelector(getUserStateSelector);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     dispatch(loginUserThunk({ email: email, password: password }));
-    navigate('/');
+    !isLoading ?? navigate('/');
   };
 
   return (

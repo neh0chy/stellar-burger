@@ -8,10 +8,7 @@ import {
   removeOrderModalData
 } from '../../services/slices/constructorSlice';
 import { AppDispatch } from 'src/services/store';
-import {
-  getUserOrdersThunk,
-  getUserStateSelector
-} from '../../services/slices/userSlice';
+import { getUserStateSelector } from '../../services/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
@@ -45,7 +42,6 @@ export const BurgerConstructor: FC = () => {
     if (userData) {
       const order = prepareOrder();
       dispatch(postOrderThunk(order));
-      dispatch(getUserOrdersThunk());
     } else {
       navigate('/login');
     }

@@ -7,7 +7,8 @@ import {
   getUserApi,
   loginUserApi,
   logoutApi,
-  registerUserApi
+  registerUserApi,
+  updateUserApi
 } from '@api';
 
 export type TUserState = {
@@ -43,7 +44,12 @@ export const getUserOrdersThunk = createAsyncThunk(
   getOrdersApi
 );
 
-export const getUserLogout = createAsyncThunk('burgerUser/logout', logoutApi);
+export const userUpdateThunk = createAsyncThunk(
+  'burgerUser/update',
+  async (data: Partial<TRegisterData>) => await updateUserApi(data)
+);
+
+export const userLogoutThunk = createAsyncThunk('burgerUser/logout', logoutApi);
 
 export const constructorSlice = createSlice({
   name: 'burgerUser',
@@ -118,17 +124,31 @@ export const constructorSlice = createSlice({
         state.isAuthenticated = true;
       })
 
-      .addCase(getUserLogout.pending, (state) => {
+      .addCase(userUpdateThunk.pending, (state) => {
+        state.isLoading = true;
+        state.userError = null;
+      })
+      .addCase(userUpdateThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.userError = action.error.message as string;
+      })
+      .addCase(userUpdateThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.userError = null;
+        state.userData = action.payload.user;
+      })
+
+      .addCase(userLogoutThunk.pending, (state) => {
         state.isLoading = true;
         state.userError = null;
         state.isAuthenticated = true;
       })
-      .addCase(getUserLogout.rejected, (state, action) => {
+      .addCase(userLogoutThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.userError = action.error.message as string;
         state.isAuthenticated = true;
       })
-      .addCase(getUserLogout.fulfilled, (state) => {
+      .addCase(userLogoutThunk.fulfilled, (state) => {
         state.userData = null;
         state.userOrders = [];
         state.userError = null;

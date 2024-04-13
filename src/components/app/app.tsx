@@ -16,19 +16,14 @@ import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { ProtectedRoute } from '../protected-route';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from '../../services/store';
 import { getIngredientsThunk } from '../../services/slices/ingredientsSlice';
-import { AppDispatch } from '../../services/store';
-import {
-  getUserStateSelector,
-  getUserThunk
-} from '../../services/slices/userSlice';
+import { getUserThunk } from '../../services/slices/userSlice';
 
 const App = () => {
   const location = useLocation();
   const background = location.state?.background;
-  const dispatch = useDispatch<AppDispatch>();
-  const { isAuthenticated } = useSelector(getUserStateSelector);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getIngredientsThunk());
@@ -65,7 +60,7 @@ const App = () => {
             path='/feed/:id'
             element={
               <Modal
-                title={'Детали ингредиента'}
+                title={'Детали заказа'}
                 onClose={() => {
                   history.back();
                 }}
@@ -78,7 +73,7 @@ const App = () => {
             path='/ingredients/:id'
             element={
               <Modal
-                title={''}
+                title={'Детали ингредиента'}
                 onClose={() => {
                   history.back();
                 }}
@@ -93,7 +88,7 @@ const App = () => {
               path='/profile/orders/:number'
               element={
                 <Modal
-                  title={''}
+                  title={'Детали заказа'}
                   onClose={() => {
                     history.back();
                   }}

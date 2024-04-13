@@ -1,19 +1,18 @@
 import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../services/store';
 import {
   getConstructorStateSelector,
   postOrderThunk,
   removeOrderModalData
 } from '../../services/slices/constructorSlice';
-import { AppDispatch } from 'src/services/store';
 import { getUserStateSelector } from '../../services/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
   const { constructorItems, orderModalData, loading } = useSelector(
     getConstructorStateSelector
   );

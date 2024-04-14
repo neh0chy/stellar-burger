@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/store';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { getUserStateSelector } from '../../services/slices/userSlice';
 import { Preloader } from '../ui/preloader';

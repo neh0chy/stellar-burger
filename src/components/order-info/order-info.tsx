@@ -3,11 +3,11 @@ import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useDispatch, useSelector } from '../../services/store';
-import { getIngredientsStateSelector } from '../../services/slices/ingredientsSlice';
+import { getIngredientsStateSelector } from '../../services/slices/ingredientsSlice/ingredientsSlice';
 import {
   getOrderByNumberSelector,
   getOrderByNumberThunk
-} from '../../services/slices/orderByNumberSlice';
+} from '../../services/slices/orderByNumberSlice/orderByNumberSlice';
 import { useParams } from 'react-router-dom';
 
 export const OrderInfo: FC = () => {

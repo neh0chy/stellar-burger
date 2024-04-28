@@ -9,7 +9,7 @@ import {
   logoutApi,
   registerUserApi,
   updateUserApi
-} from '../../utils/burger-api';
+} from '../../../utils/burger-api';
 
 export type TUserState = {
   userData: TUser | null;

@@ -6,8 +6,8 @@ import {
   getConstructorStateSelector,
   postOrderThunk,
   removeOrderModalData
-} from '../../services/slices/constructorSlice';
-import { getUserStateSelector } from '../../services/slices/userSlice';
+} from '../../services/slices/constructorSlice/constructorSlice';
+import { getUserStateSelector } from '../../services/slices/userSlice/userSlice';
 import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {

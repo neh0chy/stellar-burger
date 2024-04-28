@@ -96,8 +96,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "plugin:storybook/recommended",
-      "plugin:cypress/recommended"
+      "plugin:storybook/recommended"
     ]
   }
 }

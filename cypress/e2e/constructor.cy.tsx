@@ -57,7 +57,7 @@ describe('Проверка открытия модального окна с д�
 });
 
 describe('Проверка создания заказа', () => {
-  beforeEach('Подмена запросов и создание фейковых токенов', () => {
+  beforeEach('Проверка создания фейковых токенов', () => {
     window.localStorage.setItem('refreshToken', 'test-refreshToken');
     cy.setCookie('accessToken', 'test-accessToken');
     cy.getAllLocalStorage().should('be.not.empty');

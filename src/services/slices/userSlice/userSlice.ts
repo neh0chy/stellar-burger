@@ -111,7 +111,7 @@ export const userSlice = createSlice({
       })
 
       .addCase(getUserOrdersThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isLoading = false;
         state.userError = null;
         state.isAuthenticated = false;
       })

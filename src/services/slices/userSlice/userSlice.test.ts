@@ -119,7 +119,7 @@ describe('Проверка работы редьюсера userSlice', () => {
       const action = { type: getUserOrdersThunk.pending.type };
       const state = userSlice(initialState, action);
       expect(state.userError).toEqual(null);
-      expect(state.isLoading).toEqual(true);
+      expect(state.isLoading).toEqual(false);
       expect(state.isAuthenticated).toEqual(false);
     });
 

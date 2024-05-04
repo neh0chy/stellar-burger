@@ -9,7 +9,7 @@ import {
   logoutApi,
   registerUserApi,
   updateUserApi
-} from '@api';
+} from '../../../utils/burger-api';
 
 export type TUserState = {
   userData: TUser | null;
@@ -51,7 +51,7 @@ export const userUpdateThunk = createAsyncThunk(
 
 export const userLogoutThunk = createAsyncThunk('burgerUser/logout', logoutApi);
 
-export const constructorSlice = createSlice({
+export const userSlice = createSlice({
   name: 'burgerUser',
   initialState,
   reducers: {},
@@ -62,14 +62,17 @@ export const constructorSlice = createSlice({
     builder
       .addCase(registerUserThunk.pending, (state) => {
         state.userError = null;
+        state.isLoading = true;
         state.isAuthenticated = false;
       })
       .addCase(registerUserThunk.rejected, (state, action) => {
         state.userError = action.error.message as string;
+        state.isLoading = false;
         state.isAuthenticated = false;
       })
       .addCase(registerUserThunk.fulfilled, (state, action) => {
         state.userError = null;
+        state.isLoading = false;
         state.userData = action.payload.user;
         state.isAuthenticated = false;
       })
@@ -158,6 +161,6 @@ export const constructorSlice = createSlice({
   }
 });
 
-export const {} = constructorSlice.actions;
-export const { getUserStateSelector } = constructorSlice.selectors;
-export default constructorSlice.reducer;
+export const {} = userSlice.actions;
+export const { getUserStateSelector } = userSlice.selectors;
+export default userSlice.reducer;

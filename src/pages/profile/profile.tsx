@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from '../../services/store';
 import {
   getUserStateSelector,
   userUpdateThunk
-} from '../../services/slices/userSlice';
+} from '../../services/slices/userSlice/userSlice';
 
 export const Profile: FC = () => {
   const { userData } = useSelector(getUserStateSelector);

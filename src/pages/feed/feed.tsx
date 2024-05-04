@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from '../../services/store';
 import {
   getFeedStateSelector,
   getFeedThunk
-} from '../../services/slices/feedSlice';
+} from '../../services/slices/feedSlice/feedSlice';
 
 export const Feed: FC = () => {
   const dispatch = useDispatch();
